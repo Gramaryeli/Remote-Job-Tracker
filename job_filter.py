@@ -1,7 +1,7 @@
 import requests
 import feedparser
 import csv
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 # 移除了本地代理环境专用的 urllib3 证书忽略代码
 
@@ -80,7 +80,9 @@ def fetch_and_filter_jobs():
             print("-" * 50)
 
     if matched_jobs:
-        filename = f"Remote_Jobs_{datetime.now().strftime('%Y-%m-%d_%H%M')}.csv"
+        # 强制指定时区为 UTC+8 (东八区)
+        tz = timezone(timedelta(hours=8))
+        filename = f"Remote_Jobs_{datetime.now(tz).strftime('%Y-%m-%d_%H%M')}.csv"
         with open(filename, "w", newline="", encoding="utf-8-sig") as f:
             writer = csv.DictWriter(f, fieldnames=["职位名称", "发布时间", "职位链接", "数据来源"])
             writer.writeheader()
