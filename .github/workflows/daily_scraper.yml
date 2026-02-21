@@ -1,0 +1,38 @@
+name: Daily Remote Job Scraper
+
+# 触发条件：定时触发
+on:
+  schedule:
+    # 使用 Cron 语法。注意：GitHub 使用的是 UTC 时间。
+    # UTC 的 0 点，正好是北京时间/台北时间每天早上 8 点！
+    - cron: '0 0 * * *'
+  # 允许你手动点击按钮随时运行测试
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # 使用最新的 Linux 云端服务器
+
+    steps:
+      - name: 📥 检出代码
+        uses: actions/checkout@v3
+
+      - name: 🐍 设置 Python 环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' # 指定 Python 运行版本
+
+      - name: 📦 安装依赖包
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🚀 运行爬虫脚本
+        run: python job_filter.py
+
+      - name: 📁 收集生成的 CSV 表格
+        # 将生成的 CSV 文件打包成附件供你下载
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-job-list
+          path: '*.csv' # 抓取所有的 csv 文件
