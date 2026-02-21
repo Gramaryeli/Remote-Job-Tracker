@@ -42,11 +42,11 @@ jobs:
           server_address: smtp.qq.com 
           server_port: 465
           secure: true
-          username: ${{ Gramaryeli }}
-          password: ${{ 174933lw }}
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
           subject: 🚀 你的今日远程工作清单已送达！
           # 发送给谁（直接发给你自己）
-          to: ${{ Gramaryeli }} 
+          to: ${{ secrets.MAIL_USERNAME }}
           from: Remote Job Bot
           body: |
             你好！
